@@ -1,0 +1,6 @@
+
+{
+  "name": "KangSantri AI",
+  "description": "A versatile AI chatbot powered by OpenRouter, featuring customizable API keys, AI model selection, and organized chat sessions. Built for a responsive and intuitive user experience.",
+  "requestFramePermissions": ["camera"]
+}

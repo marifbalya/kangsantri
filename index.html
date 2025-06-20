@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KangSantri AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --font-family-sans: 'Inter', sans-serif;
+
+      --bg-primary: rgb(17 24 39); /* gray-900 */
+      --bg-secondary: rgb(31 41 55); /* gray-800 */
+      --bg-tertiary: rgb(55 65 81); /* gray-700 */
+      --bg-quaternary: rgb(75 85 99); /* gray-600 */
+      --bg-overlay: rgba(0,0,0,0.6);
+      
+      --text-primary: rgb(243 244 246); /* gray-100 */
+      --text-secondary: rgb(209 213 219); /* gray-300 */
+      --text-muted: rgb(156 163 175); /* gray-400 */
+      --text-placeholder: rgb(107 114 128); /* gray-500 */
+      --text-accent: var(--accent-primary);
+
+      --accent-primary: rgb(59 130 246); /* blue-500 */
+      --accent-primary-hover: rgb(37 99 235); /* blue-600 */
+      --accent-primary-content: rgb(255 255 255);
+
+      --accent-secondary: rgb(16 185 129); /* emerald-500 */
+      --accent-secondary-hover: rgb(5 150 105); /* emerald-600 */
+      --accent-secondary-content: rgb(255 255 255);
+
+      --border-primary: rgb(75 85 99); /* gray-600 */
+      --border-secondary: rgb(55 65 81); /* gray-700 */
+      --border-focus: var(--accent-primary);
+
+      --destructive: rgb(239 68 68); /* red-500 */
+      --destructive-hover: rgb(220 38 38); /* red-600 */
+      --destructive-content: rgb(255 255 255);
+      
+      --success: rgb(34 197 94); /* green-500 */
+      --success-content: rgb(255 255 255);
+
+      --code-bg: rgb(10, 15, 25);
+      --code-text: var(--text-secondary);
+      --code-border: var(--border-secondary);
+
+      --ring-color: var(--accent-primary); /* For focus rings */
+
+      --chat-icon-button-bg: var(--bg-quaternary);
+      --chat-icon-button-bg-hover: var(--accent-primary);
+      --chat-icon-button-text: var(--text-secondary);
+      --chat-icon-button-text-hover: var(--accent-primary-content);
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overscroll-behavior-y: contain;
+      scrollbar-color: var(--bg-tertiary) var(--bg-secondary);
+      scrollbar-width: thin;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--bg-quaternary);
+    }
+
+    /* Focus Rings Utility */
+    .focus-ring {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--ring-color);
+    }
+    .focus-ring-inset {
+       outline: 2px solid transparent;
+       outline-offset: 2px;
+       box-shadow: inset 0 0 0 2px var(--ring-color);
+    }
+    
+    /* Prose styles for chat messages */
+    .prose-chat {
+      color: var(--text-primary);
+      line-height: 1.7; /* Slightly increased line height for readability */
+      font-size: 0.925rem; /* Slightly adjust base font size for chat */
+    }
+    .prose-chat a {
+      color: var(--text-accent);
+      text-decoration: underline;
+    }
+    .prose-chat strong {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .prose-chat em {
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+    .prose-chat ol, .prose-chat ul {
+      padding-left: 1.75em; /* Adjusted padding */
+      margin-top: 0.75em;
+      margin-bottom: 0.75em;
+    }
+    .prose-chat li {
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
+    }
+    .prose-chat ol > li::marker {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .prose-chat ul > li::marker {
+      color: var(--text-muted);
+    }
+    .prose-chat hr {
+      border-color: var(--border-primary);
+      margin-top: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    .prose-chat blockquote {
+      border-left: 3px solid var(--accent-primary);
+      padding-left: 1em;
+      margin-left: 0;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+    .prose-chat h1, .prose-chat h2, .prose-chat h3, .prose-chat h4, .prose-chat h5, .prose-chat h6 {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-top: 1.25em;
+      margin-bottom: 0.5em;
+    }
+    .prose-chat h1 { font-size: 1.5em; }
+    .prose-chat h2 { font-size: 1.3em; }
+    .prose-chat h3 { font-size: 1.15em; }
+    .prose-chat h4 { font-size: 1.0em; }
+
+    .prose-chat pre {
+      background-color: var(--code-bg) !important;
+      color: var(--code-text) !important;
+      padding: 1rem !important;
+      padding-top: 2.75rem !important; /* Make space for buttons */
+      border-radius: 0.5rem !important;
+      overflow-x: auto !important;
+      font-size: 0.875em !important;
+      border: 1px solid var(--code-border);
+      position: relative;
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+    .prose-chat code { /* Inline code */
+      color: var(--text-accent);
+      font-size: 0.875em !important;
+      background-color: var(--bg-tertiary) !important;
+      padding: 0.2rem 0.4rem !important;
+      border-radius: 0.25rem !important;
+      font-weight: 500;
+      word-wrap: break-word;
+    }
+    .prose-chat pre code { /* Reset for code inside pre */
+      padding: 0 !important;
+      background-color: transparent !important;
+      color: inherit !important;
+      font-weight: normal;
+      border-radius: 0 !important;
+      font-size: 1em !important; /* Make pre code same size as pre */
+    }
+    .prose-chat img {
+      border-radius: 0.375rem;
+      border: 1px solid var(--border-primary);
+      max-width: 100%;
+      height: auto;
+      margin-top: 0.75em;
+      margin-bottom: 0.75em;
+    }
+    .code-action-button-group {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.6rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+    .code-action-button {
+        background-color: var(--chat-icon-button-bg);
+        color: var(--chat-icon-button-text);
+        border: none;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s, background-color 0.2s, color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .prose-chat pre:hover .code-action-button {
+        opacity: 1;
+    }
+    .code-action-button:hover {
+        background-color: var(--chat-icon-button-bg-hover);
+        color: var(--chat-icon-button-text-hover);
+    }
+
+    /* Table styles */
+    .prose-chat table {
+        width: auto; /* Fit content, or 100% if desired */
+        max-width: 100%;
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        border: 1px solid var(--border-primary);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .prose-chat th, .prose-chat td {
+        border: 1px solid var(--border-primary);
+        padding: 0.6em 0.8em;
+        text-align: left;
+    }
+    .prose-chat th {
+        background-color: var(--bg-tertiary);
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    .prose-chat tr:nth-child(even) {
+        background-color: var(--bg-secondary);
+    }
+    .prose-chat tr:hover {
+        background-color: var(--bg-quaternary);
+    }
+
+
+    /* New styles for copy button below message */
+    .message-actions-toolbar {
+      display: flex;
+      justify-content: flex-end; /* Aligns items (like copy button) to the right */
+      margin-top: 0.375rem; /* Equivalent to mt-1.5 */
+      opacity: 0; /* Hidden by default */
+      transition: opacity 0.2s ease-in-out;
+      height: 1.25rem; /* Approx h-5, to reserve space and prevent layout shift */
+    }
+
+    .message-bubble:hover .message-actions-toolbar {
+      opacity: 1; /* Show on message bubble hover */
+    }
+
+    .message-copy-button-below {
+      background-color: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 0.125rem; /* Smaller padding for a smaller button */
+      border-radius: 0.25rem;
+      cursor: pointer;
+      display: flex; /* To align icon and potential text */
+      align-items: center;
+      transition: color 0.2s ease-in-out;
+    }
+    .message-copy-button-below:hover {
+      color: var(--accent-primary);
+    }
+    .message-copy-button-below svg { /* Target the SVG icon directly if needed */
+      width: 0.875rem; /* w-3.5 */
+      height: 0.875rem; /* h-3.5 */
+    }
+
+    /* Electric Text Animation for Logo */
+    @keyframes electricTextAnimation {
+      0%, 100% {
+        text-shadow:
+          0 0 1px rgba(var(--accent-primary-rgb, 59, 130, 246), 0.7),
+          0 0 3px rgba(var(--accent-primary-rgb, 59, 130, 246), 0.5),
+          0 0 5px rgba(var(--accent-primary-rgb, 37, 99, 235), 0.3);
+      }
+      50% {
+        text-shadow:
+          0 0 2px rgba(var(--accent-primary-rgb, 59, 130, 246), 0.9),
+          0 0 5px rgba(var(--accent-primary-rgb, 37, 99, 235), 0.7),
+          0 0 8px rgba(var(--accent-primary-rgb, 59, 130, 246), 0.5),
+          0 0 12px rgba(var(--accent-primary-rgb, 37, 99, 235), 0.3);
+      }
+    }
+    .electric-text {
+      /* Define --accent-primary-rgb if not already defined globally or ensure JS sets it */
+      /* For direct CSS: --accent-primary-rgb: 59, 130, 246; */
+      /* If using JS to set this for dynamic theme changes, ensure it's available */
+      animation: electricTextAnimation 2.5s infinite linear;
+    }
+    :root { /* Adding rgb version for text shadow animation */
+         --accent-primary-rgb: 59, 130, 246;
+         --accent-primary-hover-rgb: 37, 99, 235;
+    }
+    
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "marked": "https://esm.sh/marked@^12.0.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
